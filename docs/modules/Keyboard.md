@@ -2,7 +2,9 @@
 > This module requires your user is in the `input` group.
 
 > [!IMPORTANT]
-> The keyboard layout feature is only available on Sway and Hyprland.
+> The keyboard layout feature is only available on Sway, Hyprland, and Triad.
+
+Triad support uses native Triad IPC. `TRIAD_SOCKET` is used when set; otherwise Ironbar looks for `triad.sock` under `XDG_RUNTIME_DIR`.
 
 Displays the toggle state of the capslock, num lock and scroll lock keys, and the current keyboard layout.
 

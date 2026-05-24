@@ -49,7 +49,7 @@ Ironbar is designed to support anything from a lightweight bar to a full desktop
 
 ## Features
 
-- First-class support for Sway and Hyprland, and partial support for Niri
+- First-class support for Sway and Hyprland, plus Niri and Triad support for select modules
 - Fully themeable with hot-loaded CSS
 - Popups to show rich content
 - A range of modules which integrate with native desktop libraries

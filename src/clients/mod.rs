@@ -15,6 +15,7 @@ pub mod clipboard;
     feature = "bindmode",
     feature = "hyprland",
     feature = "keyboard",
+    feature = "triad",
     feature = "workspaces",
 ))]
 pub mod compositor;
@@ -55,6 +56,8 @@ pub struct Clients {
     sway: Option<Arc<sway::Client>>,
     #[cfg(feature = "hyprland")]
     hyprland: Option<Arc<compositor::hyprland::Client>>,
+    #[cfg(feature = "triad")]
+    triad: Option<Arc<compositor::triad::Client>>,
     #[cfg(feature = "bindmode")]
     bindmode: Option<Arc<dyn compositor::BindModeClient>>,
     #[cfg(feature = "clipboard")]
@@ -182,6 +185,17 @@ impl Clients {
         } else {
             let client = Arc::new(compositor::hyprland::Client::new());
             self.hyprland.replace(client.clone());
+            client
+        }
+    }
+
+    #[cfg(feature = "triad")]
+    pub fn triad(&mut self) -> Arc<compositor::triad::Client> {
+        if let Some(client) = &self.triad {
+            client.clone()
+        } else {
+            let client = Arc::new(compositor::triad::Client::new());
+            self.triad.replace(client.clone());
             client
         }
     }

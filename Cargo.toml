@@ -87,9 +87,10 @@ focused = []
 inhibit = ["chrono"]
 
 keyboard = ["dep:colpetto", "dep:evdev-rs", "dep:rustix", "futures-lite"]
-"keyboard+all" = ["keyboard", "keyboard+sway", "keyboard+hyprland"]
+"keyboard+all" = ["keyboard", "keyboard+sway", "keyboard+hyprland", "keyboard+triad"]
 "keyboard+sway" = ["keyboard", "sway"]
 "keyboard+hyprland" = ["keyboard", "hyprland"]
+"keyboard+triad" = ["keyboard", "triad"]
 
 label = []
 
@@ -115,14 +116,16 @@ tray = ["system-tray"]
 volume = ["libpulse-binding"]
 
 workspaces = ["futures-lite"]
-"workspaces+all" = ["workspaces", "workspaces+sway", "workspaces+hyprland", "workspaces+niri"]
+"workspaces+all" = ["workspaces", "workspaces+sway", "workspaces+hyprland", "workspaces+niri", "workspaces+triad"]
 "workspaces+sway" = ["workspaces", "sway"]
 "workspaces+hyprland" = ["workspaces", "hyprland"]
 "workspaces+niri" = ["workspaces", "niri"]
+"workspaces+triad" = ["workspaces", "triad"]
 
 sway = ["swayipc-async", "futures-lite"]
 
 niri = ["dep:serde_json"]
+triad = ["dep:serde_json"]
 
 extras = ["dep:schemars", "dep:clap_complete"]
 

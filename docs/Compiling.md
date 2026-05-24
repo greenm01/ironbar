@@ -139,6 +139,7 @@ cargo build --release --no-default-features \
 | keyboard+all        | Enables the `keyboard` module with keyboard layout support for all compositors.                                      |
 | keyboard+sway       | Enables the `keyboard` module with keyboard layout support for Sway.                                                 |
 | keyboard+hyprland   | Enables the `keyboard` module with keyboard layout support for Hyprland.                                             |
+| keyboard+triad      | Enables the `keyboard` module with Triad keyboard layout support.                                                    |
 | label               | Enables the `label` module.                                                                                          |
 | launcher            | Enables the `launcher` module.                                                                                       |
 | music+all           | Enables the `music` module with support for all player types.                                                        |
@@ -154,7 +155,9 @@ cargo build --release --no-default-features \
 | workspaces+sway     | Enables the `workspaces` module with support for Sway.                                                               |
 | workspaces+hyprland | Enables the `workspaces` module with support for Hyprland.                                                           |
 | workspaces+niri     | Enables the `workspaces` module with support for Niri.                                                               |
+| workspaces+triad    | Enables the `workspaces` module with native Triad IPC support.                                                       |
 | **Other**           |                                                                                                                      |
+| triad               | Enables native Triad IPC support.                                                                                    |
 | extra               | Enables JSON schema support, shell completion support, and the CLI `--print-schema` and `--print-completions` flags. |
 | battery.test        | Enables the `battery` module with a mock client in place of the upower one.                                          |
 

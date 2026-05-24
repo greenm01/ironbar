@@ -12,6 +12,8 @@ pub mod hyprland;
 pub mod niri;
 #[cfg(feature = "sway")]
 pub mod sway;
+#[cfg(feature = "triad")]
+pub mod triad;
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -32,6 +34,8 @@ pub enum Compositor {
     Hyprland,
     #[cfg(feature = "niri")]
     Niri,
+    #[cfg(feature = "triad")]
+    Triad,
     Unsupported,
 }
 
@@ -47,6 +51,8 @@ impl Display for Compositor {
                 Self::Hyprland => "Hyprland",
                 #[cfg(feature = "workspaces+niri")]
                 Self::Niri => "Niri",
+                #[cfg(feature = "triad")]
+                Self::Triad => "Triad",
                 Self::Unsupported => "Unsupported",
             }
         )
@@ -57,7 +63,12 @@ impl Compositor {
     /// Attempts to get the current compositor.
     /// This is done by checking system env vars.
     fn get_current() -> Self {
-        if std::env::var("SWAYSOCK").is_ok() {
+        if triad_session_detected() {
+            cfg_if! {
+                if #[cfg(feature = "triad")] { Self::Triad }
+                else { tracing::error!("Not compiled with Triad support"); Self::Unsupported }
+            }
+        } else if std::env::var("SWAYSOCK").is_ok() {
             cfg_if! {
                 if #[cfg(feature = "sway")] { Self::Sway }
                 else { tracing::error!("Not compiled with Sway support"); Self::Unsupported }
@@ -90,6 +101,8 @@ impl Compositor {
             Self::Hyprland => Ok(clients.hyprland()),
             #[cfg(feature = "niri")]
             Self::Niri => Err(Error::Unsupported("bindmode", &["sway", "hyprland"])),
+            #[cfg(feature = "triad")]
+            Self::Triad => Err(Error::Unsupported("bindmode", &["sway", "hyprland"])),
             Self::Unsupported => Err(Error::Unsupported("bindmode", &["sway", "hyprland"])),
             #[allow(unreachable_patterns)]
             _ => Err(Error::Disabled("bindmode")),
@@ -109,7 +122,12 @@ impl Compositor {
             Self::Hyprland => Ok(clients.hyprland()),
             #[cfg(feature = "niri")]
             Self::Niri => Err(Error::Unsupported("keyboard", &["sway", "hyprland"])),
-            Self::Unsupported => Err(Error::Unsupported("keyboard", &["sway", "hyprland"])),
+            #[cfg(feature = "keyboard+triad")]
+            Self::Triad => Ok(clients.triad()),
+            Self::Unsupported => Err(Error::Unsupported(
+                "keyboard",
+                &["sway", "hyprland", "triad"],
+            )),
             #[allow(unreachable_patterns)]
             _ => Err(Error::Disabled("keyboard")),
         }
@@ -130,14 +148,34 @@ impl Compositor {
             Self::Hyprland => Ok(clients.hyprland()),
             #[cfg(feature = "workspaces+niri")]
             Self::Niri => Ok(Arc::new(niri::Client::new())),
+            #[cfg(feature = "workspaces+triad")]
+            Self::Triad => Ok(clients.triad()),
             Self::Unsupported => Err(Error::Unsupported(
                 "workspaces",
-                &["sway", "hyprland", "niri"],
+                &["sway", "hyprland", "niri", "triad"],
             )),
             #[allow(unreachable_patterns)]
             _ => Err(Error::Disabled("workspaces")),
         }
     }
+}
+
+fn triad_session_detected() -> bool {
+    if std::env::var("TRIAD_SOCKET")
+        .is_ok_and(|path| !path.is_empty() && std::path::Path::new(&path).exists())
+    {
+        return true;
+    }
+
+    ["XDG_CURRENT_DESKTOP", "DESKTOP_SESSION"]
+        .into_iter()
+        .any(|key| {
+            std::env::var(key).is_ok_and(|value| value.to_ascii_lowercase().contains("triad"))
+        })
+        || std::env::var_os("XDG_RUNTIME_DIR")
+            .map(std::path::PathBuf::from)
+            .map(|dir| dir.join("triad.sock").exists())
+            .unwrap_or(false)
 }
 
 #[derive(Debug, Clone)]

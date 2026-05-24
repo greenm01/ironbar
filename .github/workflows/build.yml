@@ -112,6 +112,7 @@ jobs:
           - keyboard+all
           - keyboard+sway
           - keyboard+hyprland
+          - keyboard+triad
           - label
           - launcher
           - menu
@@ -128,6 +129,8 @@ jobs:
           - workspaces+sway
           - workspaces+hyprland
           - workspaces+niri
+          - workspaces+triad
+          - triad
           - extras
 
     steps:

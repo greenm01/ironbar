@@ -1,5 +1,7 @@
 > [!IMPORTANT]
-> This module is currently only supported on Sway, Hyprland and Niri.
+> This module is currently only supported on Sway, Hyprland, Niri, and Triad.
+
+Triad support uses native Triad IPC. `TRIAD_SOCKET` is used when set; otherwise Ironbar looks for `triad.sock` under `XDG_RUNTIME_DIR`.
 
 Shows all current workspaces. Clicking a workspace changes focus to it.
 
